@@ -1,21 +1,33 @@
 package com.example.apod;
 
-import android.content.Context;
+
 
 import java.util.ArrayList;
 
-public class PrepareHtml {
+
+
+
+
+
+
+public class PrepareHtml  {
+
+
+
+
 
     public static String PrepareHtml(ArrayList<String> resultNasaValueSet) {
 
         // media_type
         String media_type = resultNasaValueSet.get(3);
 
+
         String resultHtml;
         resultHtml = null;
 
 
         // в зависимости от обрабатываемого контента, мы будем формировать нужную разметку
+        // пока что делал только для картинок
         switch (media_type) {
 
 
@@ -50,12 +62,12 @@ public class PrepareHtml {
 
             // пока не знаем других типов
             default:
-                resultHtml = "<h1>" + " NELZYA NAYTI METOD " + "<h1>";
+
+                resultHtml = "<h1>" + "NE UDALOS" + "<h1>";
                 break;
 
-
-
         }
+
 
         return resultHtml;
 
