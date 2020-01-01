@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">Apod - get daily NASA media content</string>
+    <string name="click_to_new_content">Click here to get new media content</string>
+    <string name="no_show_content_methods">No methods for show this content</string>
+
+
+    <string name="action_settings">Settings</string>
+
+    <string name="menu_item_about">About program</string>
+    <string name="menu_item_get_today_content">Get today content</string>
+    <string name="menu_item_main">Main</string>
+
+</resources>
