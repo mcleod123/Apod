@@ -1,7 +1,10 @@
 package com.example.apod;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -97,13 +100,40 @@ public class MainActivity extends AppCompatActivity {
                 Intent intent = new Intent(MainActivity.this, AboutActivity.class);
                 startActivity(intent);
                 return true;
+
+
             // получить контент на сегодня
             case R.id.action_get_today_content:
-
                 // показать контент по умолчанию на сегодня
                 ShowContentOnWebView();
+                return true;
+
+            // выход из приложения
+            case R.id.action_exit_program:
+                // показать контент по умолчанию на сегодня
+
+                // диалог выхода
+                final AlertDialog.Builder exitDialogBuilder = new AlertDialog.Builder(MainActivity.this);
+                exitDialogBuilder.setMessage(R.string.dialog_are_you_exit_program)
+                .setCancelable(false)
+                .setPositiveButton(R.string.dialog_exit_program_yes, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        finish();
+                    }
+                })
+                .setNegativeButton(R.string.dialog_exit_program_no, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                });
+                AlertDialog alert = exitDialogBuilder.create();
+                alert.setTitle(R.string.dialog_are_you_exit_program);
+                alert.show();
 
                 return true;
+
             // по умолчанию
             default:
                 return super.onOptionsItemSelected(item);
