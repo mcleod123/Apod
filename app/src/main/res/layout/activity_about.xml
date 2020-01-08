@@ -31,10 +31,23 @@
         android:layout_marginTop="20dp"
         android:padding="10dp"
         android:text="@string/about_text_content"
-        android:textSize="14sp"
+        android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/about_text_title" />
+        app:layout_constraintTop_toBottomOf="@+id/about_text_title"
+        android:clickable="true"
+        android:onClick="OnClick"
+        />
+
+    <ImageView
+        android:id="@+id/ic_cat"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="invisible"
+        android:clickable="true"
+        android:onClick="OnClick"
+        android:src="@drawable/ic_cat"
+        />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
