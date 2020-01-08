@@ -106,12 +106,8 @@ public class ContentFromNasa {
                 try {
                     if (myConnection.getResponseCode() == 200) {
                         // Success
-                        // result_uri_1 = "Connection OTKRYT";
-                        // result_uri = "https://apod.nasa.gov/apod/image/1912/M20_volskiy1024.jpg";
                     } else {
                         // Error handling code goes here
-                        // result_uri = "https://google.com/";
-                        // result_uri_1 = "NARKOMAN!";
                     }
                 } catch (IOException e) {
                     e.printStackTrace();

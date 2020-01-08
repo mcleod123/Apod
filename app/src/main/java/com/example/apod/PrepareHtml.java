@@ -2,6 +2,9 @@ package com.example.apod;
 
 
 
+import android.content.Context;
+
+import androidx.appcompat.app.AppCompatActivity;
 import java.util.ArrayList;
 
 
@@ -10,13 +13,13 @@ import java.util.ArrayList;
 
 
 
-public class PrepareHtml  {
+public class PrepareHtml extends AppCompatActivity {
 
 
 
 
 
-    public static String PrepareHtml(ArrayList<String> resultNasaValueSet) {
+    public static String PrepareHtml(ArrayList<String> resultNasaValueSet, Context context) {
 
         // media_type
         String media_type = resultNasaValueSet.get(3);
@@ -63,7 +66,9 @@ public class PrepareHtml  {
             // пока не знаем других типов
             default:
 
-                resultHtml = "<h1>" + "NE UDALOS" + "<h1>";
+
+                String messagePart = context.getString(R.string.no_show_content_methods);
+                resultHtml = "<h1>" + messagePart + "<h1>";
                 break;
 
         }

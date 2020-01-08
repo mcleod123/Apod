@@ -201,7 +201,7 @@ public class MainActivity extends AppCompatActivity {
 
         // загрузим текущий контент
         webView.loadData(
-                PrepareHtml.PrepareHtml(resultNasaValueSet),
+                PrepareHtml.PrepareHtml(resultNasaValueSet, this),
                 "text/html",
                 "UTF-8"
 
