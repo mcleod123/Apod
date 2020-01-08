@@ -21,6 +21,19 @@ public class AboutActivity extends AppCompatActivity {
     }
 
 
+    /* нажатие клавиатцрной кнопки НАЗАД */
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+
+        // переходим на главную активность
+        Intent intent = new Intent(AboutActivity.this, MainActivity.class);
+        startActivity(intent);
+        finish();
+    }
+    /* --------------------------------- */
+
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_about, menu);

@@ -83,6 +83,34 @@ public class MainActivity extends AppCompatActivity {
     /* ------------------------------------------ */
 
 
+    /* нажатие кнопки НАЗАД на клавиатуре*/
+    @Override
+    public void onBackPressed() {
+        // это нам пока не надо
+        // super.onBackPressed();
+
+        // диалог выхода
+        final AlertDialog.Builder exitDialogBuilder = new AlertDialog.Builder(MainActivity.this);
+        exitDialogBuilder.setMessage(R.string.dialog_are_you_exit_program)
+                .setCancelable(false)
+                .setPositiveButton(R.string.dialog_exit_program_yes, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        finish();
+                    }
+                })
+                .setNegativeButton(R.string.dialog_exit_program_no, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                });
+        AlertDialog alert = exitDialogBuilder.create();
+        alert.setTitle(R.string.dialog_are_you_exit_program);
+        alert.show();
+
+    }
+    /* ------------------------------------------ */
 
 
 
@@ -99,6 +127,8 @@ public class MainActivity extends AppCompatActivity {
             case R.id.action_about:
                 Intent intent = new Intent(MainActivity.this, AboutActivity.class);
                 startActivity(intent);
+                // завершаем главную активность при переходе на "О программе"
+                finish();
                 return true;
 
 
