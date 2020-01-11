@@ -1,9 +1,11 @@
 package com.example.apod;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -68,6 +70,19 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    @Override
+    public void onBackPressed() {
+        // super.onBackPressed();
+        openQuitDialog();
+    }
+
+
+
+
+
+
+
+
 
 
 
@@ -101,9 +116,8 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-
     /*  Выбор пунктов выпадающего меню  */
-   @Override
+    @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
 
         // какой пункт меню нажали
@@ -135,7 +149,7 @@ public class MainActivity extends AppCompatActivity {
 
             // выход из приложения
             case R.id.action_exit_app:
-                finish();
+                openQuitDialog();
                 return true;
 
 
@@ -150,7 +164,7 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-
+    /* Соберем HTML код, который потом вставим в веб вью */
     public String PrepareHtmlPage(ArrayList<String> resultNasaValueSet, boolean show_in_hd) {
 
         // media_type
@@ -219,8 +233,7 @@ public class MainActivity extends AppCompatActivity {
         return resultHtml;
 
     }
-
-
+    /* ------------------------------------------------- */
 
 
 
@@ -277,8 +290,6 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-
-
     /* Показ сообщений Toast */
     public void ShowToast(String message_string) {
         Toast toast_message = Toast.makeText(
@@ -292,6 +303,7 @@ public class MainActivity extends AppCompatActivity {
 
 
 
+    /* Если нет интернета то паказываем картинку ошибки */
     public void ShowErrorImage1() {
 
 
@@ -315,6 +327,34 @@ public class MainActivity extends AppCompatActivity {
         ShowToast(getString(R.string.show_error_message));
 
     }
+    /* ------------------------------------------------ */
 
+
+    /* диалог выхода из приложения  */
+    private void openQuitDialog() {
+
+
+        // диалог выхода
+        final AlertDialog.Builder exitDialogBuilder = new AlertDialog.Builder(MainActivity.this);
+        exitDialogBuilder.setMessage(R.string.dialog_are_you_exit_program)
+                .setCancelable(false)
+                .setPositiveButton(R.string.dialog_exit_program_yes, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        finish();
+                    }
+                })
+                .setNegativeButton(R.string.dialog_exit_program_no, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                });
+        AlertDialog alert = exitDialogBuilder.create();
+        alert.setTitle(R.string.dialog_are_you_exit_program);
+        alert.show();
+
+    }
+    /* ------------------------------------------------ */
 
 }

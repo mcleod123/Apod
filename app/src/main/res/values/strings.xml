@@ -10,7 +10,11 @@
     <string name="menu_item_get_today_content">Get today content</string>
     <string name="menu_item_get_today_content_hd">Get today content in HD</string>
     <string name="menu_item_main">Main</string>
-    <string name="menu_item_exit_app">X Close</string>
+    <string name="menu_item_exit_app">Close APP</string>
+
+    <string name="dialog_exit_program_no">No</string>
+    <string name="dialog_exit_program_yes">Yep</string>
+    <string name="dialog_are_you_exit_program">Already leaving?</string>
 
     <string name="show_error_message">May be there is no internet connection? Please try again later.</string>
 
