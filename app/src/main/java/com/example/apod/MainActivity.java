@@ -133,6 +133,12 @@ public class MainActivity extends AppCompatActivity {
                 return true;
 
 
+            // выход из приложения
+            case R.id.action_exit_app:
+                finish();
+                return true;
+
+
             // по умолчанию
             default:
                 // return super.onOptionsItemSelected(item);

@@ -10,6 +10,7 @@
     <string name="menu_item_get_today_content">Get today content</string>
     <string name="menu_item_get_today_content_hd">Get today content in HD</string>
     <string name="menu_item_main">Main</string>
+    <string name="menu_item_exit_app">X Close</string>
 
     <string name="show_error_message">May be there is no internet connection? Please try again later.</string>
 
