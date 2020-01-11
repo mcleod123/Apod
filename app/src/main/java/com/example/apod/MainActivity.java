@@ -31,6 +31,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
@@ -77,10 +78,14 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    public void onDestroy() {
+        moveTaskToBack(true);
 
+        super.onDestroy();
 
-
-
+        System.runFinalizersOnExit(true);
+        System.exit(0);
+    }
 
 
 
@@ -172,8 +177,11 @@ public class MainActivity extends AppCompatActivity {
 
         String image_url = null;
         if(show_in_hd == false) {
+
+            // обычное изображение
             image_url = resultNasaValueSet.get(0);
         } else {
+            // качественное изобравжение в HD
             image_url = resultNasaValueSet.get(4);
         }
 
@@ -189,31 +197,24 @@ public class MainActivity extends AppCompatActivity {
             // с картинкой все просто
             case "image":
 
-                resultHtml = "<style>\n" +
-                        "   .sign {\n" +
-                        "    float: center;\n" +
-                        "    margin: 10px 0; \n" +
-                        "   }\n" +
-                        "   .sign figcaption {\n" +
-                        "    margin: 0; color:#fff; padding:10px 20px; text-align: justify; \n" +
-                        "   }\n" +
-                        "  body, html { background:#000; padding: 0; margin: 0; color: #fff;} h1 {color:#ff0; padding:10px; text-align:center;}  "+
-                        "  img {width: 100%;} "+
-                        "  </style>\n" +
-                        " <body>\n" +
-                        "  <figure class=\"sign\">\n" +
-                        "<h1>" +
-                        resultNasaValueSet.get(1) +
-                        "</h1>" +
-                        "   <p><img src=\"" +
-                        image_url +
-                        "\"></p>\n" +
-                        "   <figcaption>" +
-                        resultNasaValueSet.get(2) +
-                        "</figcaption>\n" +
-                        "  </figure>\n" +
-                        "</body>";
+//                resultHtml = "<style>\n" +
+//                        " .sign { float: center; margin: 10px 0; }\n" +
+//                        " .sign figcaption { margin: 0; color:#fff; padding:10px 20px; text-align: justify; }\n" +
+//                        " body, html { background:#000; padding: 0; margin: 0; color: #fff;} " +
+//                        " h1 {color:#ff0; padding:10px; text-align:center;}  " +
+//                        "  img {width: 100%;} "+
+//                        "  </style>\n" +
+//                        " <body>\n" +
+//                        "  <figure class=\"sign\">\n" +
+//                        "<h1>" + resultNasaValueSet.get(1) + "</h1>" +
+//                        "<p><img src=\"" + image_url + "\"></p>\n" +
+//                        "<figcaption>" + resultNasaValueSet.get(2) + "</figcaption>\n" +
+//                        "  </figure>\n" +
+//                        "</body>";
 
+                // resultHtml = "<h1 style=\"color:#ff0; padding:10px; text-align:center;\">" + resultNasaValueSet.get(1) + "</h1>";
+                resultHtml = "<img src=\"" + image_url + "\" alt=\"\" />";
+                // resultHtml += "<p style=\"margin: 0; color:#fff; padding:10px 20px; text-align: justify;\">" + resultNasaValueSet.get(2) + "</p>";
 
 
                 break;
@@ -263,7 +264,7 @@ public class MainActivity extends AppCompatActivity {
 
            // покажем вью, на котором отобразим контент
            WebView webView = findViewById(R.id.web_view_main);
-           webView.setVisibility(View.VISIBLE);
+
 
            // до того, как показать вью - настроим ее
            webView.getSettings().setDefaultZoom(WebSettings.ZoomDensity.FAR);
@@ -272,16 +273,16 @@ public class MainActivity extends AppCompatActivity {
            webView.getSettings().setLoadWithOverviewMode(true);
            webView.getSettings().setMinimumFontSize(32);
            webView.getSettings().setAllowContentAccess(true);
-           // webView.setBackgroundColor(R.color.absoluteDark);
+           webView.setBackgroundColor(R.color.absoluteDark);
 
            // загрузим текущий контент в HTML
-           String htmlValue = PrepareHtmlPage(resultNasaValueSet, show_in_hd);
-
            webView.loadData(
-                   htmlValue,
+                   PrepareHtmlPage(resultNasaValueSet, show_in_hd),
                    "text/html",
                    "UTF-8"
            );
+
+           webView.setVisibility(View.VISIBLE);
 
        }
 
@@ -341,7 +342,13 @@ public class MainActivity extends AppCompatActivity {
                 .setPositiveButton(R.string.dialog_exit_program_yes, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        finish();
+
+                        moveTaskToBack(true);
+                        MainActivity.super.onDestroy();
+                        System.runFinalizersOnExit(true);
+                        System.exit(0);
+
+                       MainActivity.this.finish();
                     }
                 })
                 .setNegativeButton(R.string.dialog_exit_program_no, new DialogInterface.OnClickListener() {

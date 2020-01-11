@@ -40,10 +40,6 @@
         <activity
             android:name=".AboutActivity"
             android:label="@string/menu_item_about">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
         </activity>
 
 

@@ -56,6 +56,7 @@ public class AboutActivity extends AppCompatActivity {
             case R.id.action_main:
                 Intent intent = new Intent(AboutActivity.this, MainActivity.class);
                 startActivity(intent);
+                finish();
                 return true;
             // по умолчанию
             default:
