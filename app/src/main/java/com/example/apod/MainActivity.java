@@ -212,9 +212,9 @@ public class MainActivity extends AppCompatActivity {
 //                        "  </figure>\n" +
 //                        "</body>";
 
-                // resultHtml = "<h1 style=\"color:#ff0; padding:10px; text-align:center;\">" + resultNasaValueSet.get(1) + "</h1>";
-                resultHtml = "<img src=\"" + image_url + "\" alt=\"\" />";
-                // resultHtml += "<p style=\"margin: 0; color:#fff; padding:10px 20px; text-align: justify;\">" + resultNasaValueSet.get(2) + "</p>";
+                resultHtml = "<!doctype html><html><head></head><title></title><body><h1><font color='white'>" + resultNasaValueSet.get(1) + "</font></h1>";
+                resultHtml += "<img src=\"" + image_url + "\" />";
+                resultHtml += "<p><font color='white'>" + resultNasaValueSet.get(2) + "</font></p></body></html>";
 
 
                 break;
@@ -262,6 +262,10 @@ public class MainActivity extends AppCompatActivity {
            ImageView startImageView = findViewById(R.id.start_image_on_screen);
            startImageView.setVisibility(View.INVISIBLE);
 
+
+           View mainElement = findViewById(R.id.main_element);
+           // mainElement.setBackgroundColor(0xFFFCFFFC);
+
            // покажем вью, на котором отобразим контент
            WebView webView = findViewById(R.id.web_view_main);
 
@@ -273,6 +277,7 @@ public class MainActivity extends AppCompatActivity {
            webView.getSettings().setLoadWithOverviewMode(true);
            webView.getSettings().setMinimumFontSize(32);
            webView.getSettings().setAllowContentAccess(true);
+           // webView.setBackgroundColor(R.color.absoluteWhite);
            webView.setBackgroundColor(R.color.absoluteDark);
 
            // загрузим текущий контент в HTML
@@ -306,6 +311,9 @@ public class MainActivity extends AppCompatActivity {
 
     /* Если нет интернета то паказываем картинку ошибки */
     public void ShowErrorImage1() {
+
+        // View mainElement = findViewById(R.id.main_element);
+        // mainElement.setBackgroundColor(0xFFFFFFFF);
 
 
         // скроем стартовую картинку, если она отображается

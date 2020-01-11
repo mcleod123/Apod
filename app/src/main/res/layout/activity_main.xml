@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity"
     android:background="@color/absoluteDark"
+    android:id="@+id/main_element"
     >
 
 
@@ -42,7 +43,6 @@
         android:padding="0dp"
         android:gravity="center"
         android:visibility="invisible"
-        android:background="@color/absoluteDark"
         />
 
 
