@@ -28,11 +28,5 @@
             app:showAsAction="never"
             />
 
-        <item
-            android:id="@+id/action_show_error_message"
-            android:orderInCategory="200"
-            android:title="@string/menu_item_show_error_message"
-            app:showAsAction="never"
-            />
 
 </menu>

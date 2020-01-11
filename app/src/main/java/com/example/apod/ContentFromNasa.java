@@ -1,6 +1,8 @@
 package com.example.apod;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -32,17 +34,22 @@ public class ContentFromNasa {
     private static final String URI_PATH = "/planetary/apod";
     public static final String FULL_URI = URI_SCHEME + URI_AUTHORITIES + URI_PATH + "?api_key=" + API_KEY;
     public static URL rest_api_uri;
-    private static final Boolean CONTENT_IN_HD = false;
+    // private static final Boolean CONTENT_IN_HD = false;
 
-    // список значений
+    // список значений, которые будут получены из REST API
     public final ArrayList<String> resultNasaValueSet = new ArrayList<>();
 
 
+    // для проверки интернет соединения
+    NetworkChangeReceiver networkStatusValue = new NetworkChangeReceiver();
+    public static final String IS_NO_INTERNET_CONNECTION_FLAG = "no_internet";
 
 
+    // для проверочки
     // https://api.nasa.gov/planetary/apod?api_key=CYcf43kdunmOhn5KnhZ5J9iUfpY7OlG12gqqZFhx
 
 
+    // конструктор
     ContentFromNasa () {
         setRestURLfromString(FULL_URI);
     }
@@ -69,7 +76,7 @@ public class ContentFromNasa {
     }
 
 
-    public ArrayList<String> getNasaContent(Boolean view_in_hd) {
+    public ArrayList<String> getNasaContent(Boolean view_in_hd, Intent intentAPP, Context contextAPP) {
 
 
         // делаем два элемента
@@ -82,107 +89,109 @@ public class ContentFromNasa {
             resultNasaValueSet.add(4,""); // hd_url
         }
 
+        Log.d("test_test", "Начали проверку тырнета");
+
+        // если интернет не подключен, то никаких потоков создавать не будем и вернем пустое значение
+        String currentInternet = networkStatusValue.IsInternetActive(contextAPP, intentAPP);
+
+        Log.d("test_test", "Вот, что получили: " + currentInternet);
+
+        if(currentInternet.equals(NetworkChangeReceiver.NO_INTERNET)) {
+
+            Log.d("test_test", "Тырнет у нас такой: " + currentInternet);
+
+            // понимаю, что костыль, но хоть понятно, какое значение придет, чтобы его отловить
+            resultNasaValueSet.set(0, IS_NO_INTERNET_CONNECTION_FLAG);
+            // return resultNasaValueSet;
 
 
+        // а вот если с интернетом все норм, то запускаем поток
+        // и живем нормальной человеческой жизнью
+        }  else {
 
-        Thread thread = new Thread(new Runnable() {
-            @Override public void run() {
+            Log.d("test_test", "Тырнет у нас такой: " + currentInternet);
 
-                setRestURLfromString(FULL_URI);
+            Thread thread = new Thread(new Runnable() {
+                @Override public void run() {
 
-
-                // Create connection
-                HttpsURLConnection myConnection = null;
-                try {
-                    myConnection = (HttpsURLConnection) getRestApiURL().openConnection();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                    setRestURLfromString(FULL_URI);
 
 
-                if (myConnection != null) {
-                    myConnection.setRequestProperty("User-Agent", "my-rest-app-v0.1");
-                }
-
-                try {
-                    if (myConnection.getResponseCode() == 200) {
-                        // Success
-                        // result_uri_1 = "Connection OTKRYT";
-                        // result_uri = "https://apod.nasa.gov/apod/image/1912/M20_volskiy1024.jpg";
-                    } else {
-                        // Error handling code goes here
-                        // result_uri = "https://google.com/";
-                        // result_uri_1 = "NARKOMAN!";
+                    // Create connection
+                    HttpsURLConnection myConnection = null;
+                    try {
+                        myConnection = (HttpsURLConnection) getRestApiURL().openConnection();
+                    } catch (IOException e) {
+                        e.printStackTrace();
                     }
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
 
 
-                // разбор ответа от сервера
-                InputStream responseBody = null;
-                try {
-                    responseBody = myConnection.getInputStream();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-
-
-                InputStreamReader responseBodyReader =
-                        null;
-                try {
-                    responseBodyReader = new InputStreamReader(responseBody, "UTF-8");
-                } catch (UnsupportedEncodingException e) {
-                    e.printStackTrace();
-                }
-
-
-
-                JsonReader jsonReader = new JsonReader(responseBodyReader);
-
-
-
-                // извлечь инфу
-                try {
-                    jsonReader.beginObject(); // Start processing the JSON object
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-
-
-                while (true) {
+                    if (myConnection != null) {
+                        myConnection.setRequestProperty("User-Agent", "my-rest-app-v0.1");
+                    }
 
                     try {
-                        if (!jsonReader.hasNext()) break;
-                    } catch (IOException e) {  e.printStackTrace(); }
+                        if (myConnection.getResponseCode() == 200) {
+                            // Success
+                            // result_uri_1 = "Connection OTKRYT";
+                            // result_uri = "https://apod.nasa.gov/apod/image/1912/M20_volskiy1024.jpg";
+                        } else {
+                            // Error handling code goes here
+                            // result_uri = "https://google.com/";
+                            // result_uri_1 = "NARKOMAN!";
+                        }
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
 
-                    String key = null; // Fetch the next key
 
+                    // разбор ответа от сервера
+                    InputStream responseBody = null;
                     try {
-                        key = jsonReader.nextName();
-                    } catch (IOException e) {  e.printStackTrace(); }
+                        responseBody = myConnection.getInputStream();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
 
 
-                    // 0)
-                    // result_url
-                    if (key.equals("url")) {
+                    InputStreamReader responseBodyReader =
+                            null;
+                    try {
+                        responseBodyReader = new InputStreamReader(responseBody, "UTF-8");
+                    } catch (UnsupportedEncodingException e) {
+                        e.printStackTrace();
+                    }
 
-                        String value = null;
+
+
+                    JsonReader jsonReader = new JsonReader(responseBodyReader);
+
+
+
+                    // извлечь инфу
+                    try {
+                        jsonReader.beginObject(); // Start processing the JSON object
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+
+
+                    while (true) {
 
                         try {
-                            value = jsonReader.nextString();
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                        resultNasaValueSet.set(0, value);
-                        Log.d("test_test","Set value URL: " + value);
-                        continue;
+                            if (!jsonReader.hasNext()) break;
+                        } catch (IOException e) {  e.printStackTrace(); }
 
-                    } else {
+                        String key = null; // Fetch the next key
 
-                        // 1)
-                        // result title
-                        if (key.equals("title")) {
+                        try {
+                            key = jsonReader.nextName();
+                        } catch (IOException e) {  e.printStackTrace(); }
+
+
+                        // 0)
+                        // result_url
+                        if (key.equals("url")) {
 
                             String value = null;
 
@@ -191,15 +200,15 @@ public class ContentFromNasa {
                             } catch (IOException e) {
                                 e.printStackTrace();
                             }
-                            resultNasaValueSet.set(1, value);
-                            Log.d("test_test","Set value TITLE: " + value);
+                            resultNasaValueSet.set(0, value);
+                            Log.d("test_test","Set value URL: " + value);
                             continue;
 
                         } else {
 
-                            // 2
-                            // result explanation
-                            if(key.equals("explanation")) {
+                            // 1)
+                            // result title
+                            if (key.equals("title")) {
 
                                 String value = null;
 
@@ -208,16 +217,15 @@ public class ContentFromNasa {
                                 } catch (IOException e) {
                                     e.printStackTrace();
                                 }
-                                resultNasaValueSet.set(2, value);
-                                Log.d("test_test","Set value explanation: " + value);
+                                resultNasaValueSet.set(1, value);
+                                Log.d("test_test","Set value TITLE: " + value);
                                 continue;
-
 
                             } else {
 
-                                // 3
-                                // media_type
-                                if(key.equals("media_type")) {
+                                // 2
+                                // result explanation
+                                if(key.equals("explanation")) {
 
                                     String value = null;
 
@@ -226,66 +234,90 @@ public class ContentFromNasa {
                                     } catch (IOException e) {
                                         e.printStackTrace();
                                     }
-                                    resultNasaValueSet.set(3, value);
-                                    Log.d("test_test","Set value media_type: " + value);
-                                    continue;
-
-
-                                } else
-
-                                // 4
-                                // hdurl
-                                 if(key.equals("hdurl")) {
-
-                                    String value = null;
-
-                                    try {
-                                        value = jsonReader.nextString();
-                                    } catch (IOException e) {
-                                        e.printStackTrace();
-                                    }
-                                    resultNasaValueSet.set(4, value);
-                                    Log.d("test_test","Set value hdurl: " + value);
+                                    resultNasaValueSet.set(2, value);
+                                    Log.d("test_test","Set value explanation: " + value);
                                     continue;
 
 
                                 } else {
 
-                                    try {
-                                        jsonReader.skipValue();
-                                    } catch (IOException e) {
-                                        e.printStackTrace();
-                                    }
+                                    // 3
+                                    // media_type
+                                    if(key.equals("media_type")) {
+
+                                        String value = null;
+
+                                        try {
+                                            value = jsonReader.nextString();
+                                        } catch (IOException e) {
+                                            e.printStackTrace();
+                                        }
+                                        resultNasaValueSet.set(3, value);
+                                        Log.d("test_test","Set value media_type: " + value);
+                                        continue;
+
+
+                                    } else
+
+                                        // 4
+                                        // hdurl
+                                        if(key.equals("hdurl")) {
+
+                                            String value = null;
+
+                                            try {
+                                                value = jsonReader.nextString();
+                                            } catch (IOException e) {
+                                                e.printStackTrace();
+                                            }
+                                            resultNasaValueSet.set(4, value);
+                                            Log.d("test_test","Set value hdurl: " + value);
+                                            continue;
+
+
+                                        } else {
+
+                                            try {
+                                                jsonReader.skipValue();
+                                            } catch (IOException e) {
+                                                e.printStackTrace();
+                                            }
+
+                                        }
 
                                 }
+
+
+
 
                             }
 
 
 
 
+
+
                         }
-
-
-
-
-
-
                     }
+
+                    // не забывать закрывать ридер
+                    try {
+                        jsonReader.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+
+
                 }
+            });
 
-                // не забывать закрывать ридер
-                try {
-                    jsonReader.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+            thread.start();
 
 
-            }
-        });
 
-        thread.start();
+
+        }
+
 
 
 

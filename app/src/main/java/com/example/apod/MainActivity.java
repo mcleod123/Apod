@@ -33,7 +33,13 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         contentFromNasa = new ContentFromNasa();
-        contentFromNasa.getNasaContent(false);
+        // получили значение сегодняшнего контента
+        Boolean show_in_hd = false;
+        resultNasaValueSet = contentFromNasa.getNasaContent(
+                show_in_hd,
+                getIntent(),
+                this);
+
 
         // показать сообщение, чтобы кликнули по картинке
         ShowToast(getString(R.string.click_to_new_content));
@@ -127,11 +133,6 @@ public class MainActivity extends AppCompatActivity {
                 return true;
 
 
-            // показать сообщение об ошибке
-            case R.id.action_show_error_message:
-                ShowErrorImage1();
-                return true;
-
             // по умолчанию
             default:
                 // return super.onOptionsItemSelected(item);
@@ -199,11 +200,11 @@ public class MainActivity extends AppCompatActivity {
 
             // пока не знаем других типов
             default:
-                resultHtml = "<h1>" + getString(R.string.no_show_content_methods) + "<h1>";
+                // resultHtml = "<h1>" + getString(R.string.no_show_content_methods) + "<h1>";
                 // resultHtml = "";
 
-                ShowErrorImage1();
-
+                // ShowErrorImage1();
+                resultHtml = null;
                 break;
 
 
@@ -221,51 +222,49 @@ public class MainActivity extends AppCompatActivity {
     @SuppressLint("ResourceAsColor")
     public void ShowContentOnWebView(boolean show_in_hd) {
 
-        // contentFromNasa.getNasaContent(false);
-
         // получили значение сегодняшнего контента
-        resultNasaValueSet = contentFromNasa.getNasaContent(show_in_hd);
+        resultNasaValueSet = contentFromNasa.getNasaContent(
+                                                            show_in_hd,
+                                                            getIntent(),
+                                                            this);
 
 
-        // проверочка, а точно ли у нас есть значения
-       if(resultNasaValueSet.get(0).equals("")) {
+
+        // проверочка, а точно ли у нас есть Интернет
+       if(resultNasaValueSet.get(0).equals(ContentFromNasa.IS_NO_INTERNET_CONNECTION_FLAG)) {
             ShowErrorImage1();
+
+       // а вот если с интернетом все норм
+       // то живем нормальной человеческой жизнью
+       } else {
+
+           // сначала скроем стартовую картинку
+           ImageView startImageView = findViewById(R.id.start_image_on_screen);
+           startImageView.setVisibility(View.INVISIBLE);
+
+           // покажем вью, на котором отобразим контент
+           WebView webView = findViewById(R.id.web_view_main);
+           webView.setVisibility(View.VISIBLE);
+
+           // до того, как показать вью - настроим ее
+           webView.getSettings().setDefaultZoom(WebSettings.ZoomDensity.FAR);
+           webView.getSettings().setBuiltInZoomControls(true);
+           webView.getSettings().setUseWideViewPort(true);
+           webView.getSettings().setLoadWithOverviewMode(true);
+           webView.getSettings().setMinimumFontSize(32);
+           webView.getSettings().setAllowContentAccess(true);
+           // webView.setBackgroundColor(R.color.absoluteDark);
+
+           // загрузим текущий контент в HTML
+           String htmlValue = PrepareHtmlPage(resultNasaValueSet, show_in_hd);
+
+           webView.loadData(
+                   htmlValue,
+                   "text/html",
+                   "UTF-8"
+           );
+
        }
-
-
-        // сначала скроем стартовую картинку
-        ImageView startImageView = findViewById(R.id.start_image_on_screen);
-        startImageView.setVisibility(View.INVISIBLE);
-
-        // покажем вью, на котором отобразим контент
-        WebView webView = findViewById(R.id.web_view_main);
-        webView.setVisibility(View.VISIBLE);
-
-        // до того, как показать вью - настроим ее
-        webView.getSettings().setDefaultZoom(WebSettings.ZoomDensity.FAR);
-        webView.getSettings().setBuiltInZoomControls(true);
-        webView.getSettings().setUseWideViewPort(true);
-        webView.getSettings().setLoadWithOverviewMode(true);
-        webView.getSettings().setMinimumFontSize(32);
-        webView.getSettings().setAllowContentAccess(true);
-        // webView.setBackgroundColor(R.color.absoluteDark);
-
-
-
-
-
-
-        // загрузим текущий контент
-        // webView.loadUrl(resultNasaValueSet.get(0));
-
-        // загрузим текущий контент в HTML
-        webView.loadData(
-                PrepareHtmlPage(resultNasaValueSet, show_in_hd),
-                "text/html",
-                "UTF-8"
-
-        );
-
 
     }
     /* -----------------------------------------   */
@@ -289,17 +288,25 @@ public class MainActivity extends AppCompatActivity {
 
     public void ShowErrorImage1() {
 
-        // ShowToast("dfsdfsd");
 
-
-        // скроем стартовую картинку
+        // скроем стартовую картинку, если она отображается
         ImageView startImageView1 = findViewById(R.id.start_image_on_screen);
-        startImageView1.setVisibility(View.INVISIBLE);
+        if (startImageView1.getVisibility() == View.VISIBLE) {
+            startImageView1.setVisibility(View.INVISIBLE);
+        }
+
+        // скроем активную веб вью, если она сейчас отображена и на ней уже был контент
+        WebView webViewMain = findViewById(R.id.web_view_main);
+        if (webViewMain.getVisibility() == View.VISIBLE) {
+            webViewMain.setVisibility(View.INVISIBLE);
+        }
 
         // покажем вью ошибки
         ImageView ImageError1 = findViewById(R.id.start_error_image_on_screen);
         ImageError1.setVisibility(View.VISIBLE);
 
+        // на экране покажем тост о том, что соединения возможно нет и хватит тыкать
+        ShowToast(getString(R.string.show_error_message));
 
     }
 

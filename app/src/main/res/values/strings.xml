@@ -11,6 +11,6 @@
     <string name="menu_item_get_today_content_hd">Get today content in HD</string>
     <string name="menu_item_main">Main</string>
 
-    <string name="menu_item_show_error_message">Show Error Image</string>
+    <string name="show_error_message">May be there is no internet connection? Please try again later.</string>
 
 </resources>
