@@ -79,6 +79,7 @@ public class ContentFromNasa {
             resultNasaValueSet.add(1,""); // title
             resultNasaValueSet.add(2,""); // explanation
             resultNasaValueSet.add(3,""); // media_type
+            resultNasaValueSet.add(4,""); // hd_url
         }
 
 
@@ -106,8 +107,12 @@ public class ContentFromNasa {
                 try {
                     if (myConnection.getResponseCode() == 200) {
                         // Success
+                        // result_uri_1 = "Connection OTKRYT";
+                        // result_uri = "https://apod.nasa.gov/apod/image/1912/M20_volskiy1024.jpg";
                     } else {
                         // Error handling code goes here
+                        // result_uri = "https://google.com/";
+                        // result_uri_1 = "NARKOMAN!";
                     }
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -158,7 +163,7 @@ public class ContentFromNasa {
                     } catch (IOException e) {  e.printStackTrace(); }
 
 
-                    // 1)
+                    // 0)
                     // result_url
                     if (key.equals("url")) {
 
@@ -175,7 +180,7 @@ public class ContentFromNasa {
 
                     } else {
 
-                        // 2)
+                        // 1)
                         // result title
                         if (key.equals("title")) {
 
@@ -192,7 +197,7 @@ public class ContentFromNasa {
 
                         } else {
 
-                            // 3
+                            // 2
                             // result explanation
                             if(key.equals("explanation")) {
 
@@ -210,7 +215,7 @@ public class ContentFromNasa {
 
                             } else {
 
-                                // 4
+                                // 3
                                 // media_type
                                 if(key.equals("media_type")) {
 
@@ -223,6 +228,24 @@ public class ContentFromNasa {
                                     }
                                     resultNasaValueSet.set(3, value);
                                     Log.d("test_test","Set value media_type: " + value);
+                                    continue;
+
+
+                                } else
+
+                                // 4
+                                // hdurl
+                                 if(key.equals("hdurl")) {
+
+                                    String value = null;
+
+                                    try {
+                                        value = jsonReader.nextString();
+                                    } catch (IOException e) {
+                                        e.printStackTrace();
+                                    }
+                                    resultNasaValueSet.set(4, value);
+                                    Log.d("test_test","Set value hdurl: " + value);
                                     continue;
 
 
@@ -251,7 +274,7 @@ public class ContentFromNasa {
                     }
                 }
 
-                // не забывать закрыывать ридер
+                // не забывать закрывать ридер
                 try {
                     jsonReader.close();
                 } catch (IOException e) {
@@ -263,20 +286,6 @@ public class ContentFromNasa {
         });
 
         thread.start();
-
-
-
-
-
-        if(!thread.isAlive()) {
-
-            // gdfg
-
-        }
-
-
-
-
 
 
 

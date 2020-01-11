@@ -36,31 +36,17 @@ public class PrepareHtml extends AppCompatActivity {
 
             // с картинкой все просто
             case "image":
-                resultHtml = "<style>\n" +
-                        "   .sign {\n" +
-                        "    float: center;\n" +
-                        "    \n" +
-                        "    padding: 7px; /* Поля внутри блока */\n" +
-                        "    margin: 10px 0; /* Отступы вокруг */\n" +
-                        "    \n" +
-                        "   }\n" +
-                        "   .sign figcaption {\n" +
-                        "    margin: 0 auto 5px; /* Отступы вокруг абзаца */\n" +
-                        "   }\n" +
-                        "  </style>\n" +
-                        " <body>\n" +
-                        "  <figure class=\"sign\">\n" +
+                resultHtml = "<html><body>\n" +
                         "   <p><img src=\"" +
                         resultNasaValueSet.get(0) +
                         "\"></p>\n" +
                         "<h1>" +
                         resultNasaValueSet.get(1) +
                         "</h1>" +
-                        "   <figcaption>" +
+                        "<p>" +
                         resultNasaValueSet.get(2) +
-                        "</figcaption>\n" +
-                        "  </figure>\n" +
-                        "</body>";
+                        "</p>\n" +
+                        "</body></html>";
                 break;
 
             // пока не знаем других типов

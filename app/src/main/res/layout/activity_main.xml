@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity"
-    android:background="@color/colorPrimaryDark"
+    android:background="@color/absoluteDark"
     >
 
 
@@ -13,20 +13,36 @@
         android:id="@+id/start_image_on_screen"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="20dp"
-        android:src="@drawable/ic_main_page_start_image_1"
+        android:padding="0dp"
+        android:src="@drawable/ic_apod_start_logo"
         android:visibility="visible"
         android:clickable="true"
         android:onClick="OnClick"
-        />
+        android:focusable="true"
+        android:contentDescription="@string/app_name" />
+
+    <ImageView
+        android:id="@+id/start_error_image_on_screen"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="0dp"
+        android:src="@drawable/ic_apod_error_logo"
+        android:visibility="invisible"
+        android:clickable="true"
+        android:onClick="OnClick"
+        android:focusable="true"
+        android:contentDescription="@string/app_name" />
+
+
 
     <WebView
         android:id="@+id/web_view_main"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="10dp"
+        android:padding="0dp"
         android:gravity="center"
         android:visibility="invisible"
+        android:background="@color/absoluteDark"
         />
 
 
