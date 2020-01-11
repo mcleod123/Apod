@@ -1,14 +1,74 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".AboutActivity"
-    
-    >
+    android:background="@color/absoluteDark"
+    tools:context=".AboutActivity">
 
+    <TextView
+        android:id="@+id/about_text_title"
+        android:layout_width="354dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20sp"
+        android:layout_marginBottom="8dp"
+        android:gravity="center"
+        android:text="@string/about_text_title"
+        android:textColor="#FFEB3B"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:typeface="normal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0" />
+
+    <TextView
+        android:id="@+id/about_text_content"
+        android:layout_width="370dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20sp"
+        android:clickable="true"
+        android:focusable="true"
+        android:onClick="OnClick"
+        android:padding="10sp"
+        android:text="@string/about_text_content"
+        android:textColor="@color/absoluteWhite"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/about_text_title"
+        tools:layout_editor_absoluteX="8dp" />
+
+    <ImageView
+        android:id="@+id/about_sattelite_image"
+        android:layout_width="189dp"
+        android:layout_height="205dp"
+        android:contentDescription="@string/about_text_title"
+        android:src="@drawable/ic_icon_png"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/about_text_content" />
+
+    <ImageView
+        android:id="@+id/about_cat_image"
+        android:layout_width="323dp"
+        android:layout_height="331dp"
+        android:clickable="true"
+        android:contentDescription="@string/about_text_title"
+        android:focusable="true"
+        android:onClick="OnClick"
+        android:src="@drawable/ic_cat_laser"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.501" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

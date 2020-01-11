@@ -6,16 +6,19 @@
 
     <string name="action_settings">Settings</string>
 
-    <string name="menu_item_about">About program</string>
+    <string name="menu_item_about">About App</string>
     <string name="menu_item_get_today_content">Get today content</string>
     <string name="menu_item_get_today_content_hd">Get today content in HD</string>
     <string name="menu_item_main">Main</string>
-    <string name="menu_item_exit_app">Close APP</string>
+    <string name="menu_item_exit_app">Close App</string>
 
     <string name="dialog_exit_program_no">No</string>
     <string name="dialog_exit_program_yes">Yep</string>
     <string name="dialog_are_you_exit_program">Already leaving?</string>
 
     <string name="show_error_message">May be there is no internet connection? Please try again later.</string>
+
+    <string name="about_text_title">A few words about this project</string>
+    <string name="about_text_content">This project uses daily updated NASA REST data - Astronomy Picture of the Day (APOD). Data can be downloaded both in normal mode and in HD by clicking on the corresponding application menu item. If you are not connected to the Internet, data will not be downloaded. Also note that if you click on this text three times in a row, then you will see something unusual that will forever remain in your memory. Courageous enough to try this?</string>
 
 </resources>
