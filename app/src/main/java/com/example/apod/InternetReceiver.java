@@ -5,7 +5,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
 
-public class NetworkUtil {
+public class InternetReceiver {
     public static final int TYPE_WIFI = 1;
     public static final int TYPE_MOBILE = 2;
     public static final int TYPE_NOT_CONNECTED = 0;
@@ -28,14 +28,16 @@ public class NetworkUtil {
     }
 
     public static int getConnectivityStatusString(Context context) {
-        int conn = NetworkUtil.getConnectivityStatus(context);
-        int status = 0;
-        if (conn == NetworkUtil.TYPE_WIFI) {
+        int conn = InternetReceiver.getConnectivityStatus(context);
+        int status;
+        if (conn == InternetReceiver.TYPE_WIFI) {
             status = NETWORK_STATUS_WIFI;
-        } else if (conn == NetworkUtil.TYPE_MOBILE) {
+        } else if (conn == InternetReceiver.TYPE_MOBILE) {
             status = NETWORK_STATUS_MOBILE;
-        } else if (conn == NetworkUtil.TYPE_NOT_CONNECTED) {
+        } else if (conn == InternetReceiver.TYPE_NOT_CONNECTED) {
             status = NETWORK_STATUS_NOT_CONNECTED;
+        } else {
+            status = 0;
         }
         return status;
     }

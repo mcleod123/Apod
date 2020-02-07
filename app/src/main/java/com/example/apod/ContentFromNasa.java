@@ -3,10 +3,12 @@ package com.example.apod;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.preference.PreferenceManager;
 import android.util.JsonReader;
 import android.util.Log;
 import android.widget.TextView;
@@ -17,7 +19,10 @@ import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Locale;
 
 import javax.net.ssl.HttpsURLConnection;
 
@@ -27,6 +32,12 @@ import javax.net.ssl.HttpsURLConnection;
 
 
 public class ContentFromNasa {
+
+    // для хранения данных
+    private SharedPreferences preferences;
+    public static final String DATA_DELIMETER = "[-]";
+    // ====================
+
 
     private static final String API_KEY = "CYcf43kdunmOhn5KnhZ5J9iUfpY7OlG12gqqZFhx";
     private static final String URI_SCHEME = "https://";
@@ -78,6 +89,10 @@ public class ContentFromNasa {
 
     public ArrayList<String> getNasaContent(Boolean view_in_hd, Intent intentAPP, Context contextAPP) {
 
+        // инициализируем локальное хранилище с данными
+        setMySharedPrefs(contextAPP);
+        // =============================
+
 
         // делаем два элемента
 
@@ -100,9 +115,30 @@ public class ContentFromNasa {
 
             Log.d("test_test", "Тырнет у нас такой: " + currentInternet);
 
-            // понимаю, что костыль, но хоть понятно, какое значение придет, чтобы его отловить
+            // понятно, какое значение придет, чтобы его отловить
             resultNasaValueSet.set(0, IS_NO_INTERNET_CONNECTION_FLAG);
             // return resultNasaValueSet;
+
+
+            Log.d("test_test", GetPrefsData(GetCurDate()).get(0));
+
+            // проверим, есть ли у нас локальные данные
+            if( GetPrefsData(GetCurDate()) != null) {
+
+                Log.d("test_test", "грузим локальные данные, так как они есть в shared greferences");
+
+                // если есть - грузимся из них и возвращаем значение
+                return GetPrefsData(GetCurDate());
+
+            }
+            // =======================================
+
+
+
+
+
+
+
 
 
         // а вот если с интернетом все норм, то запускаем поток
@@ -320,6 +356,24 @@ public class ContentFromNasa {
 
 
 
+        PutPrefData(
+                resultNasaValueSet.get(1),
+                resultNasaValueSet.get(0),
+                resultNasaValueSet.get(4),
+                resultNasaValueSet.get(3),
+                resultNasaValueSet.get(2)
+        );
+
+
+        /*
+            resultNasaValueSet.add(0,""); // url
+            resultNasaValueSet.add(1,""); // title
+            resultNasaValueSet.add(2,""); // explanation
+            resultNasaValueSet.add(3,""); // media_type
+            resultNasaValueSet.add(4,""); // hd_url
+        */
+
+
 
         return resultNasaValueSet;
 
@@ -330,8 +384,86 @@ public class ContentFromNasa {
 
 
 
+    // получаем наше хранилище с настройками
+    public void setMySharedPrefs(Context context_app) {
+        preferences = PreferenceManager.getDefaultSharedPreferences(context_app);
+    }
+    // ============================
 
 
 
+
+
+
+    // пишем в наше хранилище с настройками
+    public void PutPrefData(
+                        String title,
+                        String url,
+                        String hd_url,
+                        String media_type,
+                        String explanation
+    ) {
+
+
+
+        String date = GetCurDate();
+
+
+        String data_string = url + DATA_DELIMETER + title + DATA_DELIMETER + explanation + DATA_DELIMETER + media_type + DATA_DELIMETER + hd_url;
+        preferences.edit().putString(date, data_string).apply();
+
+    }
+    // ====================================
+
+
+
+
+    // получаем данные по дате - ключу
+    public ArrayList<String> GetPrefsData(String date) {
+
+        ArrayList<String> result_arr_list = null;
+
+
+       // if(preferences.contains(date)) {
+
+            String res_string = preferences.getString(date, null);
+
+            Log.d("test_test", "Данные в хранилке - " + res_string);
+
+            String[] sub_string = res_string.split(DATA_DELIMETER);
+
+            for(int i = 0; i < sub_string.length; i++) {
+                result_arr_list.add(0,sub_string[i]);
+
+            }
+
+       // }
+
+
+        return result_arr_list;
+
+    }
+    // ====================================
+
+
+
+
+
+
+    // Общая функция для получения времени в нужном нам формате
+    public String GetCurDate() {
+
+
+
+        SimpleDateFormat sdf = new SimpleDateFormat("ddMMyyyy", Locale.getDefault());
+        String date = sdf.format(new Date());
+
+
+        Log.d("test_test", "Текущая дата - " + date);
+
+        return date;
+
+    }
+    // ==============================
 
 }

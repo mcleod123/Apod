@@ -4,7 +4,6 @@ package com.example.apod;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
 
 
 public class NetworkChangeReceiver extends BroadcastReceiver {
@@ -17,10 +16,10 @@ public class NetworkChangeReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(final Context context, final Intent intent) {
 
-        int status = NetworkUtil.getConnectivityStatusString(context);
+        int status = InternetReceiver.getConnectivityStatusString(context);
 
         if ("android.net.conn.CONNECTIVITY_CHANGE".equals(intent.getAction())) {
-            if (status != NetworkUtil.NETWORK_STATUS_NOT_CONNECTED) {
+            if (status != InternetReceiver.NETWORK_STATUS_NOT_CONNECTED) {
                 isInternetActive = INTERNET;
             }
         }
@@ -31,7 +30,7 @@ public class NetworkChangeReceiver extends BroadcastReceiver {
     /* Проверяем, что интернет у нас есть ------------------------------------ */
     /* ----------------------------------------------------------------------- */
     public String IsInternetActive(final Context context, final Intent intent) {
-        int currentInternetStatus = NetworkUtil.getConnectivityStatus(context);
+        int currentInternetStatus = InternetReceiver.getConnectivityStatus(context);
         if (currentInternetStatus == 0) {
             isInternetActive = NO_INTERNET;
         } else {
