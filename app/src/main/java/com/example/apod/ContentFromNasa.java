@@ -34,7 +34,8 @@ public class ContentFromNasa {
     // для хранения данных
     private SharedPreferences preferences;
     public static final String APP_PREFERENCES_NAME = "apod_data";
-    public static final String DATA_DELIMETER = "[-]";
+    public static final String DATA_DELIMETER = "###";
+    public static final String CUR_DATE_KEY = GetCurDate();
     // ====================
 
 
@@ -92,6 +93,9 @@ public class ContentFromNasa {
         setMySharedPrefs(contextAPP);
         // =============================
 
+        // очистим... нужно было для теста
+        // preferences.edit().clear().apply();
+        // ===============================
 
         // делаем два элемента
 
@@ -103,16 +107,16 @@ public class ContentFromNasa {
             resultNasaValueSet.add(4,""); // hd_url
         }
 
-        Log.d("test_test", "Начали проверку тырнета");
+        Log.d("test_test", "Проверка качества Интернет соединения");
 
         // если интернет не подключен, то никаких потоков создавать не будем и вернем пустое значение
         String currentInternet = networkStatusValue.IsInternetActive(contextAPP, intentAPP);
 
-        Log.d("test_test", "Вот, что получили: " + currentInternet);
+        Log.d("test_test", "Текущее Интернет соединение: " + currentInternet);
 
         if(currentInternet.equals(NetworkChangeReceiver.NO_INTERNET)) {
 
-            Log.d("test_test", "Тырнет у нас такой: " + currentInternet);
+            Log.d("test_test", "Текущее Интернет соединение: " + currentInternet);
 
             // понятно, какое значение придет, чтобы его отловить
             resultNasaValueSet.set(0, IS_NO_INTERNET_CONNECTION_FLAG);
@@ -130,21 +134,17 @@ public class ContentFromNasa {
 
 
         // а вот если с интернетом все норм, то запускаем поток
-        // и живем нормальной человеческой жизнью
         }  else {
 
 
-
-
-            Log.d("test_test", "Данные из локальной хранилки на этапе выполнения программы: " + GetPrefsData(GetCurDate(), contextAPP).get(0));
-
-            // проверим, есть ли у нас локальные данные
-            if( GetPrefsData(GetCurDate(), contextAPP) != null) {
+            // проверим, есть ли у нас локальные данные для показа в этот день - текущая дата
+            ArrayList<String> res_data = GetPrefsData(contextAPP);
+            if(!res_data.isEmpty()) {
 
                 Log.d("test_test", "грузим локальные данные, так как они есть в shared greferences");
 
                 // если есть - грузимся из них и возвращаем значение
-                return GetPrefsData(GetCurDate(), contextAPP);
+                return res_data;
             }
             // =======================================
 
@@ -153,7 +153,7 @@ public class ContentFromNasa {
 
 
 
-            Log.d("test_test", "Тырнет у нас такой: " + currentInternet);
+            Log.d("test_test", "Текущее Интернет соединение: " + currentInternet);
 
             Thread thread = new Thread(new Runnable() {
                 @Override public void run() {
@@ -174,19 +174,17 @@ public class ContentFromNasa {
                         myConnection.setRequestProperty("User-Agent", "my-rest-app-v0.1");
                     }
 
+                    /*
                     try {
                         if (myConnection.getResponseCode() == 200) {
                             // Success
-                            // result_uri_1 = "Connection OTKRYT";
-                            // result_uri = "https://apod.nasa.gov/apod/image/1912/M20_volskiy1024.jpg";
                         } else {
                             // Error handling code goes here
-                            // result_uri = "https://google.com/";
-                            // result_uri_1 = "NARKOMAN!";
                         }
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
+                    */
 
 
                     // разбор ответа от сервера
@@ -245,7 +243,7 @@ public class ContentFromNasa {
                                 e.printStackTrace();
                             }
                             resultNasaValueSet.set(0, value);
-                            Log.d("test_test","Set value URL: " + value);
+                            // Log.d("test_test","Set value URL: " + value);
                             continue;
 
                         } else {
@@ -262,7 +260,7 @@ public class ContentFromNasa {
                                     e.printStackTrace();
                                 }
                                 resultNasaValueSet.set(1, value);
-                                Log.d("test_test","Set value TITLE: " + value);
+                               // Log.d("test_test","Set value TITLE: " + value);
                                 continue;
 
                             } else {
@@ -279,7 +277,7 @@ public class ContentFromNasa {
                                         e.printStackTrace();
                                     }
                                     resultNasaValueSet.set(2, value);
-                                    Log.d("test_test","Set value explanation: " + value);
+                                    //Log.d("test_test","Set value explanation: " + value);
                                     continue;
 
 
@@ -297,7 +295,7 @@ public class ContentFromNasa {
                                             e.printStackTrace();
                                         }
                                         resultNasaValueSet.set(3, value);
-                                        Log.d("test_test","Set value media_type: " + value);
+                                        //Log.d("test_test","Set value media_type: " + value);
                                         continue;
 
 
@@ -315,7 +313,7 @@ public class ContentFromNasa {
                                                 e.printStackTrace();
                                             }
                                             resultNasaValueSet.set(4, value);
-                                            Log.d("test_test","Set value hdurl: " + value);
+                                           // Log.d("test_test","Set value hdurl: " + value);
                                             continue;
 
 
@@ -439,24 +437,31 @@ public class ContentFromNasa {
 
 
     // получаем данные по дате - ключу
-    public ArrayList<String> GetPrefsData(String date, Context context_app) {
+    public ArrayList<String> GetPrefsData(Context context_app) {
 
-        ArrayList<String> result_arr_list = null;
+        ArrayList<String> result_arr_list = new ArrayList();
 
+        /*
         if (preferences == null) {
             setMySharedPrefs(context_app);
         }
+        */
 
-        String res_string = preferences.getString(date, null);
 
-        Log.d("test_test", "Данные в хранилке - " + res_string);
+        String res_string = preferences.getString(CUR_DATE_KEY, "");
 
-        String[] sub_string = res_string.split(DATA_DELIMETER);
+        if(!res_string.isEmpty()) {
 
-        for(int i = 0; i < sub_string.length; i++) {
-            result_arr_list.add(0, sub_string[i]);
+            Log.d("test_test", "Данные в локальном хранилище - " + res_string);
+
+            String[] sub_string = res_string.split(DATA_DELIMETER);
+
+            for(int i = 0; i < sub_string.length; i++) {
+                result_arr_list.add(i, sub_string[i]);
+            }
 
         }
+
 
         return result_arr_list;
     }
@@ -468,16 +473,10 @@ public class ContentFromNasa {
 
 
     // Общая функция для получения времени в нужном нам формате
-    public String GetCurDate() {
-
-
+    public static String GetCurDate() {
 
         SimpleDateFormat sdf = new SimpleDateFormat("ddMMyyyy", Locale.getDefault());
         String date = sdf.format(new Date());
-
-
-        Log.d("test_test", "Текущая дата - " + date);
-
         return date;
 
     }
