@@ -1,0 +1,24 @@
+<resources>
+    <string name="app_name">Apod - астрономічна картина дня від NASA</string>
+    <string name="click_to_new_content">Натисніть, щоб отримати новий медіа файл</string>
+    <string name="no_show_content_methods">Немає методу для показу цього контенту</string>
+
+
+    <string name="action_settings">Налаштування</string>
+
+    <string name="menu_item_about">Про програму</string>
+    <string name="menu_item_get_today_content">Отримати дані за сьогодні</string>
+    <string name="menu_item_get_today_content_hd">Отримати дані за сьогодні в HD</string>
+    <string name="menu_item_main">Головна</string>
+    <string name="menu_item_exit_app">Закрити додаток</string>
+
+    <string name="dialog_exit_program_no">Ні</string>
+    <string name="dialog_exit_program_yes">Ага</string>
+    <string name="dialog_are_you_exit_program">Точно закрити?</string>
+
+    <string name="show_error_message">На Вашому пристрої немає підключення до Інтернет? Спробуйте будь ласка пізніше.</string>
+
+    <string name="about_text_title">Кілька слів про проект</string>
+    <string name="about_text_content">Цей проект використовує щодня оновлювані дані NASA REST - Астрономічна картина дня (APOD). Дані можуть бути завантажені як в звичайному режимі, так і в HD, натиснувши на відповідний пункт меню програми. Якщо ви не підключені до Інтернету, дані не будуть завантажені. Також зверніть увагу, що якщо ви натиснете на цей текст тричі поспіль, ви побачите щось незвичайне, що назавжди залишиться у вашій пам\'яті. Досить сміливі, щоб спробувати це?</string>
+
+</resources>
