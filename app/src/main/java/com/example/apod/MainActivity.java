@@ -67,12 +67,28 @@ public class MainActivity extends AppCompatActivity {
         super.onResume();
 
         // скроем вью с контентом
-        WebView webView = findViewById(R.id.web_view_main);
-        webView.setVisibility(View.INVISIBLE);
+        // WebView webView = findViewById(R.id.web_view_main);
+        // webView.setVisibility(View.INVISIBLE);
+
+
+        // скроем блоки с данными
+        /*
+        TextView ContentTitle = findViewById(R.id.content_title);
+        ContentTitle.setVisibility(View.INVISIBLE);
+        ImageView ContentImageView = findViewById(R.id.content_image_view);
+        ContentImageView.setVisibility(View.INVISIBLE);
+        TextView ContentExplanation = findViewById(R.id.content_explanation);
+        ContentExplanation.setVisibility(View.INVISIBLE);
+
+         */
+
 
         // сначала покажем стартовую картинку
+        /*
         ImageView startImageView = findViewById(R.id.start_image_on_screen);
         startImageView.setVisibility(View.VISIBLE);
+
+         */
 
     }
 
