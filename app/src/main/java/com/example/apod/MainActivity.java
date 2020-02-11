@@ -10,7 +10,9 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.media.Image;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -133,6 +135,14 @@ public class MainActivity extends AppCompatActivity {
                 // показать контент по умолчанию на сегодня
                 // ShowContentOnWebView(false);
                 ShowContentOnView(false);
+                break;
+
+            // при клике на текст описания, поменять его прозрачность
+            case R.id.main_element:
+                TextView ContentExplanation = findViewById(R.id.content_explanation);
+                ContentExplanation.setTextColor(Color.TRANSPARENT);
+                ContentExplanation.setBackgroundColor(Color.GREEN);
+                ShowToast("Ну что за нахрен...");
                 break;
 
             default:
