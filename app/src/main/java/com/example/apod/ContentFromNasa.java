@@ -26,15 +26,14 @@ import java.util.Locale;
 
 import javax.net.ssl.HttpsURLConnection;
 
-
-
-
+import static android.content.Context.MODE_PRIVATE;
 
 
 public class ContentFromNasa {
 
     // для хранения данных
     private SharedPreferences preferences;
+    public static final String APP_PREFERENCES_NAME = "apod_data";
     public static final String DATA_DELIMETER = "[-]";
     // ====================
 
@@ -120,18 +119,7 @@ public class ContentFromNasa {
             // return resultNasaValueSet;
 
 
-            Log.d("test_test", GetPrefsData(GetCurDate()).get(0));
 
-            // проверим, есть ли у нас локальные данные
-            if( GetPrefsData(GetCurDate()) != null) {
-
-                Log.d("test_test", "грузим локальные данные, так как они есть в shared greferences");
-
-                // если есть - грузимся из них и возвращаем значение
-                return GetPrefsData(GetCurDate());
-
-            }
-            // =======================================
 
 
 
@@ -144,6 +132,26 @@ public class ContentFromNasa {
         // а вот если с интернетом все норм, то запускаем поток
         // и живем нормальной человеческой жизнью
         }  else {
+
+
+
+
+            Log.d("test_test", "Данные из локальной хранилки на этапе выполнения программы: " + GetPrefsData(GetCurDate(), contextAPP).get(0));
+
+            // проверим, есть ли у нас локальные данные
+            if( GetPrefsData(GetCurDate(), contextAPP) != null) {
+
+                Log.d("test_test", "грузим локальные данные, так как они есть в shared greferences");
+
+                // если есть - грузимся из них и возвращаем значение
+                return GetPrefsData(GetCurDate(), contextAPP);
+            }
+            // =======================================
+
+
+
+
+
 
             Log.d("test_test", "Тырнет у нас такой: " + currentInternet);
 
@@ -386,7 +394,9 @@ public class ContentFromNasa {
 
     // получаем наше хранилище с настройками
     public void setMySharedPrefs(Context context_app) {
-        preferences = PreferenceManager.getDefaultSharedPreferences(context_app);
+
+        preferences = context_app.getSharedPreferences(APP_PREFERENCES_NAME, Context.MODE_PRIVATE);
+
     }
     // ============================
 
@@ -410,7 +420,17 @@ public class ContentFromNasa {
 
 
         String data_string = url + DATA_DELIMETER + title + DATA_DELIMETER + explanation + DATA_DELIMETER + media_type + DATA_DELIMETER + hd_url;
-        preferences.edit().putString(date, data_string).apply();
+
+        // если есть что сохранять, то сохраняем
+        if(!url.isEmpty()) {
+
+            SharedPreferences.Editor editor = preferences.edit();
+            editor.putString(date, data_string );
+            editor.apply();
+
+        }
+
+
 
     }
     // ====================================
@@ -419,29 +439,26 @@ public class ContentFromNasa {
 
 
     // получаем данные по дате - ключу
-    public ArrayList<String> GetPrefsData(String date) {
+    public ArrayList<String> GetPrefsData(String date, Context context_app) {
 
         ArrayList<String> result_arr_list = null;
 
+        if (preferences == null) {
+            setMySharedPrefs(context_app);
+        }
 
-       // if(preferences.contains(date)) {
+        String res_string = preferences.getString(date, null);
 
-            String res_string = preferences.getString(date, null);
+        Log.d("test_test", "Данные в хранилке - " + res_string);
 
-            Log.d("test_test", "Данные в хранилке - " + res_string);
+        String[] sub_string = res_string.split(DATA_DELIMETER);
 
-            String[] sub_string = res_string.split(DATA_DELIMETER);
+        for(int i = 0; i < sub_string.length; i++) {
+            result_arr_list.add(0, sub_string[i]);
 
-            for(int i = 0; i < sub_string.length; i++) {
-                result_arr_list.add(0,sub_string[i]);
-
-            }
-
-       // }
-
+        }
 
         return result_arr_list;
-
     }
     // ====================================
 
