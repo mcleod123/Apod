@@ -56,7 +56,6 @@
         android:textColor="@color/absoluteWhite"
         android:textSize="20sp"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/content_image_view"
         />
 
 
@@ -68,7 +67,8 @@
         android:gravity="center"
         android:visibility="invisible"
         android:scaleType="centerCrop"
-        app:layout_constraintTop_toBottomOf="@+id/content_title"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
         />
 
     <TextView
@@ -81,10 +81,7 @@
         android:visibility="invisible"
         android:textColor="@color/colorGrey"
         android:textSize="12sp"
-        app:layout_constraintTop_toBottomOf="@+id/content_image_view"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:scrollbars="vertical"
-        android:maxLines="5"
         />
 
 

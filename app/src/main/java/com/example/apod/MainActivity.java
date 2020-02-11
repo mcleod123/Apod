@@ -294,8 +294,14 @@ public class MainActivity extends AppCompatActivity {
             ContentTitle.setVisibility(View.VISIBLE);
 
             // картинка
+            // в hd или нет
+
             ImageView ContentImageView = findViewById(R.id.content_image_view);
-            ImageManager.fetchImage(resultNasaValueSet.get(0), ContentImageView);
+            if(show_in_hd) {
+                ImageManager.fetchImage(resultNasaValueSet.get(4), ContentImageView);
+            } else {
+                ImageManager.fetchImage(resultNasaValueSet.get(0), ContentImageView);
+            }
             ContentImageView.setVisibility(View.VISIBLE);
 
             // описание
