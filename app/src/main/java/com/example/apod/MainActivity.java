@@ -8,6 +8,9 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.media.Image;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -16,8 +19,16 @@ import android.view.View;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 
 import javax.crypto.ShortBufferException;
@@ -89,10 +100,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-
-
-
-
     /* Отслеживаем клики по элементам на активити */
     public void OnClick(View view) {
 
@@ -101,13 +108,15 @@ public class MainActivity extends AppCompatActivity {
             // при клике на экране со стартовой картинкой - покажем картинку на сегодня
             case R.id.start_image_on_screen:
                 // показать контент по умолчанию на сегодня
-                ShowContentOnWebView(false);
+                // ShowContentOnWebView(false);
+                ShowContentOnView(false);
                 break;
 
             // при клике на картинку ошибки
             case R.id.start_error_image_on_screen:
                 // показать контент по умолчанию на сегодня
-                ShowContentOnWebView(false);
+                // ShowContentOnWebView(false);
+                ShowContentOnView(false);
                 break;
 
             default:
@@ -142,14 +151,16 @@ public class MainActivity extends AppCompatActivity {
             case R.id.action_get_today_content:
 
                 // показать контент по умолчанию на сегодня
-                ShowContentOnWebView(false);
+                //ShowContentOnWebView(false);
+                ShowContentOnView(false);
                 return true;
 
             // получить контент на сегодня HD
             case R.id.action_get_today_content_hd:
 
                 // показать контент по умолчанию на сегодня HD
-                ShowContentOnWebView(true);
+                // ShowContentOnWebView(true);
+                ShowContentOnView(true);
                 return true;
 
 
@@ -239,7 +250,80 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-    /* показать контент по умолчанию на сегодня */
+
+
+
+    /* показать контент по умолчанию на сегодня - НОВЫЙ НОРМАЛЬНЫЙ МЕТОД БЕЗ ИСПОЛЬЗОВАНИЯ HTML */
+    @SuppressLint("ResourceAsColor")
+    public void ShowContentOnView(boolean show_in_hd) {
+
+        // получили значение сегодняшнего контента
+        resultNasaValueSet = contentFromNasa.getNasaContent(
+                show_in_hd,
+                getIntent(),
+                this);
+
+
+
+        // проверочка, а точно ли у нас есть Интернет
+        if(resultNasaValueSet.get(0).equals(ContentFromNasa.IS_NO_INTERNET_CONNECTION_FLAG)) {
+            ShowErrorImage();
+
+        // если с интернетом все ОК, то можем работать
+        } else {
+
+
+            // 1)
+            // сначала скроем стартовую картинку
+            ImageView startImageView = findViewById(R.id.start_image_on_screen);
+            startImageView.setVisibility(View.INVISIBLE);
+            // ------------------------------------------
+
+            // 2)
+            // покажем сообщение
+            ShowToast(getString(R.string.loading));
+            // -----------------
+
+
+            // 3)
+            // покажем вью, на которых отобразим контент
+
+            // заголовок
+            TextView ContentTitle = findViewById(R.id.content_title);
+            ContentTitle.setText(resultNasaValueSet.get(1));
+            ContentTitle.setVisibility(View.VISIBLE);
+
+            // картинка
+            ImageView ContentImageView = findViewById(R.id.content_image_view);
+            ImageManager.fetchImage(resultNasaValueSet.get(0), ContentImageView);
+            ContentImageView.setVisibility(View.VISIBLE);
+
+            // описание
+            TextView ContentExplanation = findViewById(R.id.content_explanation);
+            ContentExplanation.setText(resultNasaValueSet.get(2));
+            ContentExplanation.setVisibility(View.VISIBLE);
+            // ------------------------------------------
+
+
+
+
+
+
+
+
+        }
+
+    }
+    /* -----------------------------------------   */
+
+
+
+
+
+
+
+
+    /* показать контент по умолчанию на сегодня - СТАРЫЙ МЕТОД на WEBVIEW, оставляю для истории, ибо жалко его ), мучался писал... */
     @SuppressLint("ResourceAsColor")
     public void ShowContentOnWebView(boolean show_in_hd) {
 
@@ -253,7 +337,7 @@ public class MainActivity extends AppCompatActivity {
 
         // проверочка, а точно ли у нас есть Интернет
        if(resultNasaValueSet.get(0).equals(ContentFromNasa.IS_NO_INTERNET_CONNECTION_FLAG)) {
-            ShowErrorImage1();
+            ShowErrorImage();
 
        // а вот если с интернетом все норм
        // то живем нормальной человеческой жизнью
@@ -264,7 +348,7 @@ public class MainActivity extends AppCompatActivity {
            startImageView.setVisibility(View.INVISIBLE);
 
 
-           View mainElement = findViewById(R.id.main_element);
+           // View mainElement = findViewById(R.id.main_element);
            // mainElement.setBackgroundColor(0xFFFCFFFC);
 
            // покажем вью, на котором отобразим контент
@@ -311,7 +395,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     /* Если нет интернета то паказываем картинку ошибки */
-    public void ShowErrorImage1() {
+    public void ShowErrorImage() {
 
         // View mainElement = findViewById(R.id.main_element);
         // mainElement.setBackgroundColor(0xFFFFFFFF);
@@ -372,6 +456,9 @@ public class MainActivity extends AppCompatActivity {
 
     }
     /* ------------------------------------------------ */
+
+
+
 
 
 }

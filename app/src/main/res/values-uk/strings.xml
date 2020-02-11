@@ -3,6 +3,7 @@
     <string name="click_to_new_content">Натисніть, щоб отримати новий медіа файл</string>
     <string name="no_show_content_methods">Немає методу для показу цього контенту</string>
 
+    <string name="loading">Завантаження...</string>
 
     <string name="action_settings">Налаштування</string>
 

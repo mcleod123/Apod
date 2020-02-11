@@ -403,7 +403,7 @@ public class ContentFromNasa {
 
 
 
-    // пишем в наше хранилище с настройками
+    // пишем в наше хранилище с настройками в строку, разделяя данные разделителем - ###
     public void PutPrefData(
                         String title,
                         String url,
@@ -436,7 +436,7 @@ public class ContentFromNasa {
 
 
 
-    // получаем данные по дате - ключу
+    // получаем данные из внутреннего хранилища по дате - ключу записи - формат ДДММГГГГ
     public ArrayList<String> GetPrefsData(Context context_app) {
 
         ArrayList<String> result_arr_list = new ArrayList();
@@ -466,9 +466,6 @@ public class ContentFromNasa {
         return result_arr_list;
     }
     // ====================================
-
-
-
 
 
 

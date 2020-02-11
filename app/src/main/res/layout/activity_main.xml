@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".MainActivity"
     android:background="@color/absoluteDark"
-    android:id="@+id/main_element"
-    >
+    android:id="@+id/main_element">
+
 
 
     <ImageView
@@ -44,6 +44,49 @@
         android:gravity="center"
         android:visibility="invisible"
         />
+
+    <TextView
+        android:padding="5sp"
+        android:textAlignment="center"
+        android:id="@+id/content_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/loading"
+        android:visibility="invisible"
+        android:textColor="@color/absoluteWhite"
+        android:textSize="20sp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/content_image_view"
+        />
+
+
+    <ImageView
+        android:id="@+id/content_image_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="0dp"
+        android:gravity="center"
+        android:visibility="invisible"
+        android:scaleType="centerCrop"
+        app:layout_constraintTop_toBottomOf="@+id/content_title"
+        />
+
+    <TextView
+        android:padding="8sp"
+        android:textAlignment="gravity"
+        android:id="@+id/content_explanation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/loading"
+        android:visibility="invisible"
+        android:textColor="@color/colorGrey"
+        android:textSize="12sp"
+        app:layout_constraintTop_toBottomOf="@+id/content_image_view"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:scrollbars="vertical"
+        android:maxLines="5"
+        />
+
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
