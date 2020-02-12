@@ -6,9 +6,25 @@
         <item name="colorPrimary">@color/absoluteDark</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
-
-
-
     </style>
+
+    <style name="my_text_style" parent="@android:style/TextAppearance.Medium">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/colorForTitle</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:background">@color/colorGreyDark</item>
+        <item name="android:padding">10dp</item>
+    </style>
+
+    <style name="my_title_style" parent="@android:style/TextAppearance.Medium">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/absoluteWhite</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:background">@color/colorGreyDark</item>
+        <item name="android:padding">10dp</item>
+    </style>
+
 
 </resources>

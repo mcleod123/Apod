@@ -6,5 +6,7 @@
     <color name="absoluteDark">#000</color>
     <color name="absoluteWhite">#fff</color>
     <color name="colorGrey">#ddd</color>
+    <color name="colorGreyDark">#473F3F</color>
+    <color name="colorForTitle">#68A2D8</color>
     <color name="transparent">#55000000</color>
 </resources>

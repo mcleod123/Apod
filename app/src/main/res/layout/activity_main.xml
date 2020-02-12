@@ -45,22 +45,10 @@
         android:visibility="invisible"
         />
 
-    <TextView
-        android:padding="5sp"
-        android:textAlignment="center"
-        android:id="@+id/content_title"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/loading"
-        android:visibility="invisible"
-        android:textColor="@color/absoluteWhite"
-        android:textSize="20sp"
-        app:layout_constraintTop_toTopOf="parent"
-        />
+
 
 
     <ImageView
-        android:layout_marginTop="5dp"
         android:id="@+id/content_image_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -69,20 +57,29 @@
         android:visibility="invisible"
         android:scaleType="centerCrop"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
         android:contentDescription="@string/about_text_title"
         />
 
     <TextView
-        android:padding="8sp"
+        android:textAlignment="center"
+        android:id="@+id/content_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/loading"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toTopOf="@id/content_explanation"
+        style="@style/my_title_style"
+        />
+
+
+    <TextView
         android:textAlignment="gravity"
         android:id="@+id/content_explanation"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/loading"
         android:visibility="invisible"
-        android:textColor="@color/colorGrey"
-        android:textSize="12sp"
+        style="@style/my_text_style"
         app:layout_constraintBottom_toBottomOf="parent"
         android:background="@color/absoluteDark"
         />
