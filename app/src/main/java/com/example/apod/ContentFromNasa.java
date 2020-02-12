@@ -139,7 +139,8 @@ public class ContentFromNasa {
 
             // проверим, есть ли у нас локальные данные для показа в этот день - текущая дата
             ArrayList<String> res_data = GetPrefsData(contextAPP);
-            if(!res_data.get(0).isEmpty()) {
+            /*!res_data.get(0).isEmpty()*/
+            if( !res_data.isEmpty() ) {
 
                 Log.d("test_test", "грузим локальные данные, так как они есть в shared greferences");
 

@@ -19,6 +19,8 @@ import android.graphics.Color;
 import android.media.Image;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -46,7 +48,8 @@ public class MainActivity extends AppCompatActivity {
 
     ContentFromNasa contentFromNasa;
     ArrayList<String> resultNasaValueSet = new ArrayList<>();
-
+    Integer MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE = 0;
+    String image_local_path;
 
 
     @Override
@@ -159,14 +162,16 @@ public class MainActivity extends AppCompatActivity {
             case R.id.save_button_id:
 
 
-/*
+
                 // проверим разрешения
+                /*
                 if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)
                         != PackageManager.PERMISSION_GRANTED) {
-                    ShowToast("Разрещений на чтение нэт (");
+                    ShowToast("Разрещений на чтение нет (");
                 } else {
-                    ShowToast("РАзрешения на чтение есть");
+                    ShowToast("Разрешения на чтение есть");
                 }
+                */
 
                 if (ActivityCompat.shouldShowRequestPermissionRationale(this,
                         Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
@@ -176,23 +181,71 @@ public class MainActivity extends AppCompatActivity {
                 } else {
                     // No explanation needed; request the permission
                     ActivityCompat.requestPermissions(this,
-                            new String[]{Manifest.permission.READ_CONTACTS},
-                            MY_PERMISSIONS_REQUEST_READ_CONTACTS);
+                            new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                            MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE);
+
+                    if(MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE != 0) {
+
+                        ShowToast(MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE.toString());
+                    }
 
                     // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
                     // app-defined int constant. The callback method gets the
                     // result of the request.
                 }
-*/
 
 
-/*
-                String image_uri = resultNasaValueSet.get(0);
-                Bitmap bitmapImage = ImageManager.downloadImage(image_uri);
-                String save_res_path = saveToInternalStorage(bitmapImage);
-                ShowToast(save_res_path);
 
- */
+
+                final String image_uri = resultNasaValueSet.get(0);
+
+                // ShowToast(image_uri);
+
+                // Bitmap bitmapImage = ImageManager.downloadImage(image_uri);
+                // String save_res_path = saveToInternalStorage(bitmapImage);
+                // ShowToast(save_res_path);
+
+
+                if ( image_uri == null ) {
+
+                    ShowToast("No data url image...");
+
+                } else {
+
+                    final Handler handler = new Handler() {
+                        @Override
+                        public void handleMessage(Message message) {
+                            final Bitmap image = (Bitmap) message.obj;
+                            image_local_path = saveToInternalStorage(image);
+                        }
+                    };
+
+                    final Thread thread = new Thread() {
+                        @Override
+                        public void run() {
+                            final Bitmap image = ImageManager.downloadImage(image_uri);
+                            if ( image != null ) {
+                                final Message message = handler.obtainMessage(1, image);
+                                handler.sendMessage(message);
+                            }
+                        }
+                    };
+                    ShowToast("Saved: " + image_local_path);
+                    thread.setPriority(3);
+                    thread.start();
+
+                }
+
+
+
+
+
+
+
+
+
+
+
                 break;
 
             default:
