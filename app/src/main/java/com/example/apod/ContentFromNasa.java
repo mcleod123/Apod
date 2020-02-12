@@ -139,7 +139,7 @@ public class ContentFromNasa {
 
             // проверим, есть ли у нас локальные данные для показа в этот день - текущая дата
             ArrayList<String> res_data = GetPrefsData(contextAPP);
-            if(!res_data.isEmpty()) {
+            if(!res_data.get(0).isEmpty()) {
 
                 Log.d("test_test", "грузим локальные данные, так как они есть в shared greferences");
 
@@ -438,6 +438,7 @@ public class ContentFromNasa {
 
     // получаем данные из внутреннего хранилища по дате - ключу записи - формат ДДММГГГГ
     public ArrayList<String> GetPrefsData(Context context_app) {
+        String cur_date = GetCurDate();
 
         ArrayList<String> result_arr_list = new ArrayList();
 
@@ -446,13 +447,15 @@ public class ContentFromNasa {
             setMySharedPrefs(context_app);
         }
         */
+        Log.d("test_test", "Данные в локальном хранилище за дату " + cur_date);
 
-
-        String res_string = preferences.getString(CUR_DATE_KEY, "");
+        // String res_string = preferences.getString(CUR_DATE_KEY, "");
+        String res_string = preferences.getString(cur_date, "");
 
         if(!res_string.isEmpty()) {
 
-            Log.d("test_test", "Данные в локальном хранилище - " + res_string);
+            Log.d("test_test", "Данные в локальном хранилище " + res_string);
+
 
             String[] sub_string = res_string.split(DATA_DELIMETER);
 
