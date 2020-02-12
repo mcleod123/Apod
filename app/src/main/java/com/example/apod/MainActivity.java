@@ -3,11 +3,16 @@ package com.example.apod;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.ContextWrapper;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -24,6 +29,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -137,12 +143,56 @@ public class MainActivity extends AppCompatActivity {
                 ShowContentOnView(false);
                 break;
 
-            // при клике на текст описания, поменять его прозрачность
-            case R.id.main_element:
-                TextView ContentExplanation = findViewById(R.id.content_explanation);
-                ContentExplanation.setTextColor(Color.TRANSPARENT);
-                ContentExplanation.setBackgroundColor(Color.GREEN);
-                ShowToast("Ну что за нахрен...");
+            // при клике на картинку уже загруженного контента показать кнопку сохранения фото
+            case R.id.content_image_view:
+                TextView saveButton = findViewById(R.id.save_button_id);
+
+                if(saveButton.getVisibility() == View.VISIBLE) {
+                    saveButton.setVisibility(View.INVISIBLE);
+                } else {
+                    saveButton.setVisibility(View.VISIBLE);
+                }
+                break;
+
+
+            // при клике на кнопку сохранения попытаемся сохранить картинку
+            case R.id.save_button_id:
+
+
+/*
+                // проверим разрешения
+                if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)
+                        != PackageManager.PERMISSION_GRANTED) {
+                    ShowToast("Разрещений на чтение нэт (");
+                } else {
+                    ShowToast("РАзрешения на чтение есть");
+                }
+
+                if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+                    // Show an explanation to the user *asynchronously* -- don't block
+                    // this thread waiting for the user's response! After the user
+                    // sees the explanation, try again to request the permission.
+                } else {
+                    // No explanation needed; request the permission
+                    ActivityCompat.requestPermissions(this,
+                            new String[]{Manifest.permission.READ_CONTACTS},
+                            MY_PERMISSIONS_REQUEST_READ_CONTACTS);
+
+                    // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
+                    // app-defined int constant. The callback method gets the
+                    // result of the request.
+                }
+*/
+
+
+/*
+                String image_uri = resultNasaValueSet.get(0);
+                Bitmap bitmapImage = ImageManager.downloadImage(image_uri);
+                String save_res_path = saveToInternalStorage(bitmapImage);
+                ShowToast(save_res_path);
+
+ */
                 break;
 
             default:
@@ -490,7 +540,29 @@ public class MainActivity extends AppCompatActivity {
     /* ------------------------------------------------ */
 
 
+    private String saveToInternalStorage(Bitmap bitmapImage){
+        ContextWrapper cw = new ContextWrapper(getApplicationContext());
+        // path to /data/data/yourapp/app_data/imageDir
+        File directory = cw.getDir("imageDir", Context.MODE_PRIVATE);
+        // Create imageDir
+        File mypath=new File(directory,"profile.jpg");
 
+        FileOutputStream fos = null;
+        try {
+            fos = new FileOutputStream(mypath);
+            // Use the compress method on the BitMap object to write image to the OutputStream
+            bitmapImage.compress(Bitmap.CompressFormat.PNG, 100, fos);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                fos.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return directory.getAbsolutePath();
+    }
 
 
 }

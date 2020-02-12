@@ -4,7 +4,7 @@
     <string name="no_show_content_methods">Нет метода для показа этого контента</string>
 
     <string name="loading">Загрузка...</string>
-
+    <string name="save_btn">Сохранить</string>
 
     <string name="action_settings">Настройки</string>
 
